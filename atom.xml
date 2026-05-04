@@ -176,8 +176,8 @@
     <author>
       <name>Azazel</name>
     </author>
-    <category term="epoll" scheme="http://example.com/tags/epoll/"/>
     <category term="IO" scheme="http://example.com/tags/IO/"/>
+    <category term="epoll" scheme="http://example.com/tags/epoll/"/>
     <content>
       <![CDATA[<h2 id=""><a href="#" class="headerlink" title=""></a></h2>]]>
     </content>
