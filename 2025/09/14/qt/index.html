@@ -1,0 +1,187 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author"><title>qt · Aero</title><meta name="description" content="事件机制 eventfilter1. 事件过滤器调用顺序
+事件发生 → Qt 首先把事件发送给目标对象。
+如果目标对象安装了 事件过滤器（installEventFilter）：
+事件会先传给 过滤器对象的 eventFilter()。
+过滤器可以查看或修改事件。
+返回值决定事件是否继续传递给目标对"><meta name="og:description" content="事件机制 eventfilter1. 事件过滤器调用顺序
+事件发生 → Qt 首先把事件发送给目标对象。
+如果目标对象安装了 事件过滤器（installEventFilter）：
+事件会先传给 过滤器对象的 eventFilter()。
+过滤器可以查看或修改事件。
+返回值决定事件是否继续传递给目标对"><meta name="twitter:site" content="Aero"><meta name="twitter:title" content="qt"><meta name="twitter:card" content="summary"><meta name="keywords" content=""><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Azazel's Blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">Aero</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">대문</a></li><li><a href="/archives">아카이브</a></li><li><a href="/tags">태그</a></li><li class="soc"><a href="https://github.com/amelessz" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="http://example.com/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="http://example.com" rel="noopener noreferrer">Azazel</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>qt</a></p><p class="post-meta"><span class="date meta-item">Posted at&nbsp;2025-09-14</span></p><p class="post-abstract"><h2 id="事件机制-eventfilter"><a href="#事件机制-eventfilter" class="headerlink" title="事件机制 eventfilter"></a>事件机制 eventfilter</h2><h3 id="1-事件过滤器调用顺序"><a href="#1-事件过滤器调用顺序" class="headerlink" title="1. 事件过滤器调用顺序"></a>1. 事件过滤器调用顺序</h3><ul>
+<li><strong>事件发生 → Qt 首先把事件发送给目标对象</strong>。</li>
+<li>如果目标对象安装了 <strong>事件过滤器</strong>（<code>installEventFilter</code>）：<ol>
+<li>事件会先传给 <strong>过滤器对象</strong>的 <code>eventFilter()</code>。</li>
+<li>过滤器可以查看或修改事件。</li>
+<li><strong>返回值决定事件是否继续传递给目标对象</strong>：<ul>
+<li><code>true</code> → 拦截事件，目标对象 <strong>不会再处理</strong>。</li>
+<li><code>false</code> → 事件继续传给目标对象的 <code>event()</code> 或具体事件处理函数（如 <code>keyPressEvent</code>、<code>mousePressEvent</code> 等）。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<p>所以事件过滤器本质上是 <strong>“事件的预处理器”</strong>。</p>
+<hr>
+<h3 id="2-父窗口捕获子控件事件"><a href="#2-父窗口捕获子控件事件" class="headerlink" title="2. 父窗口捕获子控件事件"></a>2. 父窗口捕获子控件事件</h3><ul>
+<li>过滤器对象可以是任何 <code>QObject</code>，包括父窗口。</li>
+<li>你可以在父窗口中为子控件安装过滤器：<ul>
+<li>父窗口的 <code>eventFilter()</code> 会 <strong>先于子控件自身处理事件</strong>被调用。</li>
+<li>父窗口可以选择拦截（<code>return true</code>）或让事件继续给子控件（<code>return false</code>）。</li>
+</ul>
+</li>
+<li>因此父窗口可以“捕获”子控件事件，并决定是否交给子控件处理。</li>
+</ul>
+<hr>
+<h3 id="3-与-keyPressEvent-的关系"><a href="#3-与-keyPressEvent-的关系" class="headerlink" title="3. 与 keyPressEvent 的关系"></a>3. 与 <code>keyPressEvent</code> 的关系</h3><ul>
+<li>如果过滤器返回 <code>false</code>：<ul>
+<li>事件会传给目标对象的 <code>event()</code>。</li>
+<li>最终调用对象的 <strong>重写事件处理函数</strong>（比如 <code>keyPressEvent()</code>）。</li>
+</ul>
+</li>
+<li>如果过滤器返回 <code>true</code>：<ul>
+<li>子控件的 <code>keyPressEvent()</code> <strong>不会被调用</strong>。</li>
+</ul>
+</li>
+</ul>
+<p>所以，你可以把过滤器理解为 <strong>“在 keyPressEvent &#x2F; mousePressEvent 等之前的第一道关卡”</strong>。</p>
+<hr>
+<h3 id="4-总结理解方式"><a href="#4-总结理解方式" class="headerlink" title="4. 总结理解方式"></a>4. 总结理解方式</h3><p>可以这样概括：</p>
+<ol>
+<li>事件发生 → 过滤器先处理。</li>
+<li>过滤器返回 <code>true</code> → 事件拦截，子控件不处理。</li>
+<li>过滤器返回 <code>false</code> → 事件继续到子控件的事件处理函数。</li>
+<li>父窗口可以安装过滤器，对子控件事件进行统一处理或拦截。</li>
+</ol>
+<h2 id="电子相册"><a href="#电子相册" class="headerlink" title="电子相册"></a>电子相册</h2><h3 id="1-qss样式和主窗口"><a href="#1-qss样式和主窗口" class="headerlink" title="1.qss样式和主窗口"></a>1.qss样式和主窗口</h3><h3 id="2-向导框"><a href="#2-向导框" class="headerlink" title="2.向导框"></a>2.向导框</h3><h3 id="3-目录树"><a href="#3-目录树" class="headerlink" title="3.目录树"></a>3.目录树</h3><p>我们在prosetpage里为browse设置槽函数</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">void</span> ProSetPage<span class="token operator">::</span><span class="token function">on_pushButton_clicked</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    QString dirpath <span class="token operator">=</span> QFileDialog<span class="token operator">::</span><span class="token function">getExistingDirectory</span><span class="token punctuation">(</span>
+        <span class="token keyword">this</span><span class="token punctuation">,</span>                   <span class="token comment" spellcheck="true">//父窗口</span>
+        <span class="token function">tr</span><span class="token punctuation">(</span><span class="token string">"选择项目文件夹"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>      <span class="token comment" spellcheck="true">//标题</span>
+        QDir<span class="token operator">::</span><span class="token function">currentPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//选择当前路径打开</span>
+        QFileDialog<span class="token operator">::</span>ShowDirsOnly<span class="token comment" spellcheck="true">//只显示文件夹</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>dirpath<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        ui<span class="token operator">-</span><span class="token operator">></span>lineEdit_2<span class="token operator">-</span><span class="token operator">></span><span class="token function">setText</span><span class="token punctuation">(</span>dirpath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>QFileDialog::getExistingDirectory</code> 是 Qt 提供的一个静态函数，专门用来 <strong>弹出一个“选择文件夹”的对话框</strong>，并返回用户选中的文件夹路径。</p>
+<p>在完成向导框的选择后，重载<code>void done(int result) override;</code>，设置完成后的动作</p>
+<p>QObject -&gt; QPaintDevice -&gt; QWidget -&gt; QDialog -&gt; ProTree</p>
+<p>ProTreeWidget-&gt;QTreeWidget</p>
+<p>ProTreeitem-&gt;QTreeWidgetItem</p>
+<p>Protreeui中添加了ProtreeWidget</p>
+<h3 id="QDialog-QWidget"><a href="#QDialog-QWidget" class="headerlink" title="QDialog QWidget"></a>QDialog QWidget</h3><p>是的，通常情况下，<code>QDialog</code> 和 [QWidget](vscode-file:&#x2F;&#x2F;vscode-app&#x2F;d:&#x2F;Microsoft VS Code&#x2F;resources&#x2F;app&#x2F;out&#x2F;vs&#x2F;code&#x2F;electron-sandbox&#x2F;workbench&#x2F;workbench.html) 在 Qt 中有不同的使用场景和设计目的：</p>
+<hr>
+<h3 id="1-QDialog-的用途"><a href="#1-QDialog-的用途" class="headerlink" title="1. QDialog 的用途"></a><strong>1. <code>QDialog</code> 的用途</strong></h3><p><code>QDialog</code> 是 [QWidget](vscode-file:&#x2F;&#x2F;vscode-app&#x2F;d:&#x2F;Microsoft VS Code&#x2F;resources&#x2F;app&#x2F;out&#x2F;vs&#x2F;code&#x2F;electron-sandbox&#x2F;workbench&#x2F;workbench.html) 的子类，专门用于实现 <strong>对话框</strong>。它的设计目的是提供一个临时的窗口，用于与用户进行交互。</p>
+<h4 id="常见用途："><a href="#常见用途：" class="headerlink" title="常见用途："></a><strong>常见用途：</strong></h4><ul>
+<li><p><strong>模态对话框</strong>：</p>
+<ul>
+<li><p>阻塞用户与其他窗口的交互，直到对话框关闭。</p>
+</li>
+<li><p>例如：文件选择器、确认对话框、设置窗口等。</p>
+</li>
+<li><p>使用</p>
+<pre><code>exec()
+</code></pre>
+<p>方法显示：</p>
+<p>QDialog dialog;</p>
+<p>dialog.exec(); <em>&#x2F;&#x2F; 模态显示</em></p>
+</li>
+</ul>
+</li>
+<li><p><strong>非模态对话框</strong>：</p>
+<ul>
+<li><p>不阻塞用户与其他窗口的交互。</p>
+</li>
+<li><p>使用</p>
+<pre><code>show()
+</code></pre>
+<p>方法显示：</p>
+<p>QDialog dialog;</p>
+<p>dialog.show(); <em>&#x2F;&#x2F; 非模态显示</em></p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="特点："><a href="#特点：" class="headerlink" title="特点："></a><strong>特点：</strong></h4><ul>
+<li>默认支持 <strong>ESC</strong> 键关闭窗口（通过 <code>reject()</code> 方法）。</li>
+<li>提供了 <code>accept()</code> 和 <code>reject()</code> 方法，用于处理用户的确认或取消操作。</li>
+<li>常用于临时窗口或弹出窗口。</li>
+</ul>
+<hr>
+<h3 id="2-QWidget-vscode-file-vscode-app-d-Microsoft-VS-Code-resources-app-out-vs-code-electron-sandbox-workbench-workbench-html-的用途"><a href="#2-QWidget-vscode-file-vscode-app-d-Microsoft-VS-Code-resources-app-out-vs-code-electron-sandbox-workbench-workbench-html-的用途" class="headerlink" title="2. [QWidget](vscode-file:&#x2F;&#x2F;vscode-app&#x2F;d:&#x2F;Microsoft VS Code&#x2F;resources&#x2F;app&#x2F;out&#x2F;vs&#x2F;code&#x2F;electron-sandbox&#x2F;workbench&#x2F;workbench.html) 的用途"></a><strong>2. [QWidget](vscode-file:&#x2F;&#x2F;vscode-app&#x2F;d:&#x2F;Microsoft VS Code&#x2F;resources&#x2F;app&#x2F;out&#x2F;vs&#x2F;code&#x2F;electron-sandbox&#x2F;workbench&#x2F;workbench.html) 的用途</strong></h3><p>[QWidget](vscode-file:&#x2F;&#x2F;vscode-app&#x2F;d:&#x2F;Microsoft VS Code&#x2F;resources&#x2F;app&#x2F;out&#x2F;vs&#x2F;code&#x2F;electron-sandbox&#x2F;workbench&#x2F;workbench.html) 是 Qt 中所有可视化控件的基类，设计为 <strong>通用窗口部件</strong>，可以用来构建主窗口的一部分或独立的窗口。</p>
+<h4 id="常见用途：-1"><a href="#常见用途：-1" class="headerlink" title="常见用途："></a><strong>常见用途：</strong></h4><ul>
+<li><p><strong>主窗口的一部分</strong>：</p>
+<ul>
+<li><p>作为主窗口的子控件，嵌入到布局中。</p>
+</li>
+<li><p>例如：工具栏、侧边栏、内容区域等。</p>
+</li>
+<li><p>使用</p>
+<pre><code>addWidget()
+</code></pre>
+<p>方法将其添加到布局中：</p>
+<p>QWidget *widget &#x3D; new QWidget;</p>
+<p>layout-&gt;addWidget(widget);</p>
+</li>
+</ul>
+</li>
+<li><p><strong>独立窗口</strong>：</p>
+<ul>
+<li><p>也可以作为一个独立的窗口显示。</p>
+</li>
+<li><p>使用</p>
+<pre><code>show()
+</code></pre>
+<p>方法显示：</p>
+<p>QWidget widget;</p>
+<p>widget.show();</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="特点：-1"><a href="#特点：-1" class="headerlink" title="特点："></a><strong>特点：</strong></h4><ul>
+<li>不会响应 <strong>ESC</strong> 键关闭窗口。</li>
+<li>更适合用作主窗口的一部分，或者需要完全自定义行为的窗口。</li>
+</ul>
+<hr>
+<h3 id="3-QDialog-和-QWidget-vscode-file-vscode-app-d-Microsoft-VS-Code-resources-app-out-vs-code-electron-sandbox-workbench-workbench-html-的区别"><a href="#3-QDialog-和-QWidget-vscode-file-vscode-app-d-Microsoft-VS-Code-resources-app-out-vs-code-electron-sandbox-workbench-workbench-html-的区别" class="headerlink" title="3. QDialog 和 [QWidget](vscode-file:&#x2F;&#x2F;vscode-app&#x2F;d:&#x2F;Microsoft VS Code&#x2F;resources&#x2F;app&#x2F;out&#x2F;vs&#x2F;code&#x2F;electron-sandbox&#x2F;workbench&#x2F;workbench.html) 的区别"></a><strong>3. <code>QDialog</code> 和 [QWidget](vscode-file:&#x2F;&#x2F;vscode-app&#x2F;d:&#x2F;Microsoft VS Code&#x2F;resources&#x2F;app&#x2F;out&#x2F;vs&#x2F;code&#x2F;electron-sandbox&#x2F;workbench&#x2F;workbench.html) 的区别</strong></h3><table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>QDialog</strong></th>
+<th><strong>QWidget</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>主要用途</strong></td>
+<td>用于对话框（模态或非模态）</td>
+<td>用于主窗口的一部分或独立窗口</td>
+</tr>
+<tr>
+<td><strong>默认行为</strong></td>
+<td>按下 <strong>ESC</strong> 键会关闭窗口</td>
+<td>不会响应 <strong>ESC</strong> 键</td>
+</tr>
+<tr>
+<td><strong>交互模式</strong></td>
+<td>支持模态和非模态</td>
+<td>通常为非模态</td>
+</tr>
+<tr>
+<td><strong>内置功能</strong></td>
+<td>提供 <code>accept()</code> 和 <code>reject()</code> 方法</td>
+<td>无此功能</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>临时窗口、弹出窗口</td>
+<td>主窗口的一部分或完全自定义的窗口</td>
+</tr>
+</tbody></table>
+</p></div><div class="share"><span>공유하기</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=http://example.com/2025/09/14/qt/%20Aero%20qt"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2025/09/28/boost-asio/" title="boost-asio"><i class="fa fa-angle-double-left"></i>&nbsp;이전 포스트: boost-asio</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2025/09/03/c-%E5%9F%BA%E7%A1%80/" title="c++基础">다음 포스트: c++基础&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="http://example.com" rel="noopener noreferrer">Azazel</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script></body></html>

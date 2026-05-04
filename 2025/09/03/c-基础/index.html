@@ -1,0 +1,393 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author"><title>c++基础 · Aero</title><meta name="description" content="– 用于记录一些要点
+未学
+STL手写
+
+模板元编程
+
+
+运算符重载运算符重载的规则与限制
+不能改变运算符的优先级和结合性
+不能创造新的运算符
+至少有一个操作数必须是用户定义的类型
+有些运算符不能重载
+从在运算符的优先级和结合性不可改变
+
+在c++中，运算符可以通过成员函数或非成员函数（通常是友元函"><meta name="og:description" content="– 用于记录一些要点
+未学
+STL手写
+
+模板元编程
+
+
+运算符重载运算符重载的规则与限制
+不能改变运算符的优先级和结合性
+不能创造新的运算符
+至少有一个操作数必须是用户定义的类型
+有些运算符不能重载
+从在运算符的优先级和结合性不可改变
+
+在c++中，运算符可以通过成员函数或非成员函数（通常是友元函"><meta name="twitter:site" content="Aero"><meta name="twitter:title" content="c++基础"><meta name="twitter:card" content="summary"><meta name="keywords" content=""><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Azazel's Blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">Aero</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">대문</a></li><li><a href="/archives">아카이브</a></li><li><a href="/tags">태그</a></li><li class="soc"><a href="https://github.com/amelessz" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="http://example.com/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="http://example.com" rel="noopener noreferrer">Azazel</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>c++基础</a></p><p class="post-meta"><span class="date meta-item">Posted at&nbsp;2025-09-03</span></p><p class="post-abstract"><p>– 用于记录一些要点</p>
+<h2 id="未学"><a href="#未学" class="headerlink" title="未学"></a>未学</h2><ul>
+<li><p>STL手写</p>
+</li>
+<li><p>模板元编程</p>
+</li>
+</ul>
+<h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><h3 id="运算符重载的规则与限制"><a href="#运算符重载的规则与限制" class="headerlink" title="运算符重载的规则与限制"></a>运算符重载的规则与限制</h3><ol>
+<li>不能改变运算符的优先级和结合性</li>
+<li>不能创造新的运算符</li>
+<li>至少有一个操作数必须是用户定义的类型</li>
+<li>有些运算符不能重载</li>
+<li>从在运算符的优先级和结合性不可改变</li>
+</ol>
+<p>在c++中，运算符可以通过成员函数或非成员函数（通常是友元函数）来重载</p>
+<h2 id="C-模板"><a href="#C-模板" class="headerlink" title="C++模板"></a>C++模板</h2><h3 id="模板基础"><a href="#模板基础" class="headerlink" title="模板基础"></a>模板基础</h3><p>C++ 模板（Templates）是现代 C++ 中强大而灵活的特性，支持泛型编程，使得代码更具复用性和类型安全性。模板不仅包括基本的函数模板和类模板，还涵盖了模板特化（全特化与偏特化）、模板参数种类、变参模板（Variadic Templates）、模板元编程（Template Metaprogramming）、SFINAE（Substitution Failure Is Not An Error）等高级内容。</p>
+<h3 id="函数模板"><a href="#函数模板" class="headerlink" title="函数模板"></a>函数模板</h3><p><strong>模板的实现放在.h头文件中</strong></p>
+<p>函数模板允许编写通用的函数，通过类型参数化，使其能够处理不同的数据类型。它通过模板参数定义与类型无关的函数。</p>
+<p><strong>语法</strong>：</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">typename</span> T<span class="token operator">></span>
+T <span class="token function">functionName</span><span class="token punctuation">(</span>T param<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//函数体</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="变参模板（Variadic-Templates）"><a href="#变参模板（Variadic-Templates）" class="headerlink" title="变参模板（Variadic Templates）"></a>变参模板（Variadic Templates）</h2><p>变参模板允许模板接受可变数量的参数，提供极高的灵活性，是实现诸如 <code>std::tuple</code>、<code>std::variant</code> 等模板库组件的基础。</p>
+<h3 id="定义与语法"><a href="#定义与语法" class="headerlink" title="定义与语法"></a>定义与语法</h3><p>变参模板使用**参数包（Parameter Park），通过<code>...</code>语法来表示</p>
+<p><strong>语法</strong>：</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">typename</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> Args<span class="token operator">></span>
+<span class="token keyword">class</span> <span class="token class-name">MyClass</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* ... */</span> <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">typename</span> T<span class="token punctuation">,</span> <span class="token keyword">typename</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> Args<span class="token operator">></span>
+<span class="token keyword">void</span> <span class="token function">myFunction</span><span class="token punctuation">(</span>T first<span class="token punctuation">,</span> Args<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* ... */</span> <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="递归与展开（Recursion-and-Expansion）"><a href="#递归与展开（Recursion-and-Expansion）" class="headerlink" title="递归与展开（Recursion and Expansion）"></a>递归与展开（Recursion and Expansion）</h3><p>变参模板通常与递归相结合，通过递归地处理参数包，或者使用 <strong>折叠表达式（Fold Expressions）</strong> 来展开发参数包。</p>
+<p><strong>递归示例：打印所有参数</strong></p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+
+<span class="token comment" spellcheck="true">// 基础情况：无参数</span>
+<span class="token keyword">void</span> <span class="token function">printAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// 递归情况：至少一个参数</span>
+<span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">typename</span> T<span class="token punctuation">,</span> <span class="token keyword">typename</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> Args<span class="token operator">></span>
+<span class="token keyword">void</span> <span class="token function">printAll</span><span class="token punctuation">(</span><span class="token keyword">const</span> T<span class="token operator">&amp;</span> first<span class="token punctuation">,</span> <span class="token keyword">const</span> Args<span class="token operator">&amp;</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> first <span class="token operator">&lt;&lt;</span> <span class="token string">" "</span><span class="token punctuation">;</span>
+    <span class="token function">printAll</span><span class="token punctuation">(</span>args<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 递归调用</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token function">printAll</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2.5</span><span class="token punctuation">,</span> <span class="token string">"Hello"</span><span class="token punctuation">,</span> <span class="token string">'A'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 输出：1 2.5 Hello A </span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>要点：</strong></p>
+<ul>
+<li>变参模板极大地提升了模板的灵活性。</li>
+<li>使用递归或折叠表达式处理参数包。</li>
+<li>常用于实现通用函数、容器类和元编程工具。</li>
+</ul>
+<h2 id="模板折叠（Fold-Expressions）"><a href="#模板折叠（Fold-Expressions）" class="headerlink" title="模板折叠（Fold Expressions）"></a>模板折叠（Fold Expressions）</h2><p><strong>1. 操作符的选择</strong></p>
+<p>选择合适的操作符（<code>op</code>）对于实现正确的折叠行为至关重要。确保所选的操作符符合所需的逻辑和计算需求。</p>
+<p><strong>2. 操作符的结合性</strong></p>
+<p>不同的操作符具有不同的结合性（左结合、右结合）。了解操作符的结合性有助于选择正确的折叠方向（左折叠或右折叠）。</p>
+<p><strong>3. 参数包的初始化</strong></p>
+<p>在二元折叠表达式中，有时需要一个初始值（<code>init</code>）。这主要用于确保折叠的正确性，尤其在参数包可能为空的情况下。</p>
+<p><strong>示例</strong>：</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;numeric></span></span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> Args<span class="token operator">></span>
+<span class="token keyword">auto</span> <span class="token function">sumWithInit</span><span class="token punctuation">(</span><span class="token keyword">int</span> init<span class="token punctuation">,</span> Args<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>init <span class="token operator">+</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token operator">+</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 左折叠</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token function">sumWithInit</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 输出：16 (10 + 1 + 2 + 3)</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="模板元编程（Template-Metaprogramming）"><a href="#模板元编程（Template-Metaprogramming）" class="headerlink" title="模板元编程（Template Metaprogramming）"></a>模板元编程（Template Metaprogramming）</h2><ul>
+<li><p><strong>什么是模板元编程</strong>：模板元编程（Template Metaprogramming）是一种在编译期通过模板机制进行代码生成和计算的编程技术。它利用编译器的模板实例化机制，在编译期间执行代码逻辑，以提高程序的性能和灵活性。</p>
+</li>
+<li><p><strong>模板元编程的优势</strong>：</p>
+</li>
+<li><ul>
+<li>提高代码的可重用性和泛化能力。</li>
+<li>在编译期进行复杂计算，减少运行时开销。</li>
+<li>实现类型安全的高级抽象。</li>
+</ul>
+</li>
+</ul>
+<h3 id="模板元编程基础"><a href="#模板元编程基础" class="headerlink" title="模板元编程基础"></a>模板元编程基础</h3><ul>
+<li><p><strong>模板特化（Template Specialization）</strong>：</p>
+</li>
+<li><ul>
+<li><strong>全特化（Full Specialization）</strong>：为特定类型提供特定实现。</li>
+<li><strong>偏特化（Partial Specialization）</strong>：为部分模板参数特定的情况提供实现。</li>
+</ul>
+</li>
+<li><p><strong>递归模板（Recursive Templates）</strong>：利用模板的递归实例化机制，实现编译期计算。</p>
+</li>
+</ul>
+<h2 id="1-左值和右值"><a href="#1-左值和右值" class="headerlink" title="1.左值和右值"></a>1.左值和右值</h2><p><strong>左值（lvalue）</strong>和<strong>右值（rvalue）</strong>是C++中用于描述表达式值类别的重要概念。</p>
+<ul>
+<li><p><strong>左值（lvalue）</strong>：</p>
+</li>
+<li><ul>
+<li>表示具有持久存储的对象。</li>
+</ul>
+</li>
+<li><ul>
+<li>可以出现在赋值语句的左侧。</li>
+</ul>
+</li>
+<li><ul>
+<li>可以被取地址（即，可以使用<code>&amp;</code>运算符）。</li>
+</ul>
+</li>
+<li><ul>
+<li>示例：变量名、引用等。</li>
+</ul>
+</li>
+<li><p><strong>右值（rvalue）</strong>：</p>
+</li>
+<li><ul>
+<li>表示临时对象或没有持久存储的值。</li>
+</ul>
+</li>
+<li><ul>
+<li>通常出现在赋值语句的右侧。</li>
+</ul>
+</li>
+<li><ul>
+<li>不能被取地址。</li>
+</ul>
+</li>
+<li><ul>
+<li>示例：字面量、临时对象、表达式结果等。</li>
+</ul>
+</li>
+</ul>
+<p>C++11进一步细化了右值的分类：</p>
+<ul>
+<li><p><strong>纯右值（prvalues）</strong>：表示临时对象或字面量，如<code>42</code>、<code>3.14</code>。</p>
+</li>
+<li><p><strong>将亡值（xvalues，expiring values）</strong>：表示即将被移动的对象，如<code>std::move</code>的结果。</p>
+</li>
+</ul>
+<h3 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h3><h4 id="1-移动语义（Move-Semantics）"><a href="#1-移动语义（Move-Semantics）" class="headerlink" title="(1) 移动语义（Move Semantics）"></a>(1) 移动语义（Move Semantics）</h4><p>允许程序 <strong>“窃取” 临时对象的资源</strong>，避免不必要的深拷贝。</p>
+<p>例子：</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main() &#123;
+    vector&lt;int&gt; v1 = &#123;1, 2, 3&#125;;
+    vector&lt;int&gt; v2 = std::move(v1); // 移动构造
+    
+    cout &lt;&lt; &quot;v1 size: &quot; &lt;&lt; v1.size() &lt;&lt; endl; // 0
+    cout &lt;&lt; &quot;v2 size: &quot; &lt;&lt; v2.size() &lt;&lt; endl; // 3
+&#125;
+</code></pre>
+<p>这里 <code>std::move(v1)</code> 将 <code>v1</code> 转换为右值引用，触发 <strong>移动构造函数</strong>，直接把 v1 的内存指针搬给 v2，效率远高于拷贝。</p>
+<hr>
+<h4 id="2-完美转发（Perfect-Forwarding）"><a href="#2-完美转发（Perfect-Forwarding）" class="headerlink" title="(2) 完美转发（Perfect Forwarding）"></a>(2) 完美转发（Perfect Forwarding）</h4><p>结合模板的转发引用（<code>T&amp;&amp;</code>），可以保留参数的左值&#x2F;右值属性，转发给其他函数。</p>
+<pre><code>template&lt;typename T&gt;
+void wrapper(T&amp;&amp; arg) &#123;
+    func(std::forward&lt;T&gt;(arg)); // 保留左值或右值特性
+&#125;
+</code></pre>
+<p>这让泛型代码在调用构造函数或函数时不丢失原始参数性质。</p>
+<hr>
+<h4 id="3-避免不必要的拷贝"><a href="#3-避免不必要的拷贝" class="headerlink" title="(3) 避免不必要的拷贝"></a>(3) 避免不必要的拷贝</h4><p>在函数参数中使用右值引用，可以专门为临时对象提供高效接口。</p>
+<pre><code>void setName(std::string&amp;&amp; s) &#123;
+    name = std::move(s); // 移动赋值，避免拷贝
+&#125;
+</code></pre>
+<p>如果传入 <code>setName(&quot;hello&quot;)</code>，<code>&quot;hello&quot;</code> 是临时对象，就能直接移动，性能优越。</p>
+<p>右值引用可以 <strong>绑定右值</strong>，让原本临时的东西延长生命周期。</p>
+<p><strong>具名右值引用变量本身是左值</strong>，因为有名字、有地址。</p>
+<p>如果需要再次作为右值使用，要配合 <code>std::move</code>。</p>
+<p>换句话说：<strong>右值引用并不是把右值“变成左值”，而是“给右值起了个名字”，这个名字当然是左值。</strong></p>
+<h2 id="2-模板万能引用（转发引用）"><a href="#2-模板万能引用（转发引用）" class="headerlink" title="2. 模板万能引用（转发引用）"></a>2. 模板万能引用（转发引用）</h2><h3 id="2-1-定义与特性"><a href="#2-1-定义与特性" class="headerlink" title="2.1 定义与特性"></a>2.1 定义与特性</h3><p><strong>模板万能引用</strong>（也称为<strong>转发引用</strong>，英文为<strong>forwarding references</strong>）是C++11引入的一种引用类型，具有以下特点：</p>
+<ul>
+<li><p>表现形式为<code>T&amp;&amp;</code>，其中<code>T</code>是模板参数。</p>
+</li>
+<li><p>在特定条件下，编译器会将其解析为左值引用或右值引用。</p>
+</li>
+<li><p>能够统一处理左值和右值，适用于泛型编程中的参数传递。</p>
+</li>
+</ul>
+<p><strong>重要特性</strong>：</p>
+<ul>
+<li><p>当模板参数<code>T</code>被推导为普通类型时，<code>T&amp;&amp;</code>是右值引用。</p>
+</li>
+<li><p>当模板参数<code>T</code>被推导为引用类型时，<code>T&amp;&amp;</code>会根据引用折叠规则解析为左值引用。</p>
+</li>
+</ul>
+<h3 id="2-2-引用折叠规则"><a href="#2-2-引用折叠规则" class="headerlink" title="2.2 引用折叠规则"></a>2.2 引用折叠规则</h3><p>右值引用类型作为表达式时是一个左值</p>
+<p>引用折叠是C++中的一项规则，用于处理引用类型的嵌套。主要规则如下：</p>
+<ul>
+<li><p><code>&amp; &amp;</code>、<code>&amp; &amp;&amp;</code>、<code>&amp;&amp; &amp;</code> 都折叠为 <code>&amp;</code>（左值引用）。</p>
+</li>
+<li><p><code>&amp;&amp; &amp;&amp;</code> 折叠为 <code>&amp;&amp;</code>（右值引用）。</p>
+</li>
+</ul>
+<p><strong>示例：</strong></p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;type_traits></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> T<span class="token operator">></span>
+<span class="token keyword">void</span> <span class="token function">check_referenc</span><span class="token punctuation">(</span>T<span class="token operator">&amp;&amp;</span> x<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>boolalpha<span class="token punctuation">;</span>
+    std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"T is lvalue reference: "</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>is_lvalue_reference<span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token operator">::</span>value <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
+    std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"T is rvalue reference: "</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>is_rvalue_reference<span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token operator">::</span>value <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
+    std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"T is rvalue : "</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>is_rvalue_reference<span class="token operator">&lt;</span>T<span class="token operator">&amp;&amp;</span><span class="token operator">></span> <span class="token operator">::</span>value <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
+    std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"x is lvalue reference: "</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>is_lvalue_reference<span class="token operator">&lt;</span><span class="token keyword">decltype</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token operator">></span><span class="token operator">::</span>value <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
+    std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"x is rvalue reference: "</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>is_rvalue_reference<span class="token operator">&lt;</span><span class="token keyword">decltype</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token operator">></span><span class="token operator">::</span>value <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+    <span class="token function">check_reference</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>          <span class="token comment" spellcheck="true">// T被推导为 int&amp;， 因此 T&amp;&amp; -> int&amp; &amp;&amp; -> int&amp;</span>
+    <span class="token function">check_reference</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>         <span class="token comment" spellcheck="true">// T被推导为 int，  T&amp;&amp; -> int&amp;&amp;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>输出</strong></p>
+<pre class="line-numbers language-cpp"><code class="language-cpp">T is lvalue reference<span class="token operator">:</span> <span class="token boolean">true</span>
+T is rvalue reference<span class="token operator">:</span> <span class="token boolean">false</span>
+T is rvalue <span class="token operator">:</span> <span class="token boolean">false</span>
+x is lvalue reference<span class="token operator">:</span> <span class="token boolean">true</span>
+x is rvalue reference<span class="token operator">:</span> <span class="token boolean">false</span>
+T is lvalue reference<span class="token operator">:</span> <span class="token boolean">false</span>
+T is rvalue reference<span class="token operator">:</span> <span class="token boolean">false</span>
+T is rvalue <span class="token operator">:</span> <span class="token boolean">true</span>
+x is lvalue reference<span class="token operator">:</span> <span class="token boolean">false</span>
+x is rvalue reference<span class="token operator">:</span> <span class="token boolean">true</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="4-原样转发（Perfect-Forwarding）"><a href="#4-原样转发（Perfect-Forwarding）" class="headerlink" title="4. 原样转发（Perfect Forwarding）"></a>4. 原样转发（Perfect Forwarding）</h2><h3 id="4-1-定义与作用"><a href="#4-1-定义与作用" class="headerlink" title="4.1 定义与作用"></a>4.1 定义与作用</h3><p><strong>原样转发</strong>（Perfect Forwarding）是指在模板函数中，将接收到的参数以其原有的值类别（左值或右值）传递给另一个函数。这项技术确保了泛型代码能够像手写特定代码那样高效和正确地处理参数。</p>
+<p><strong>作用</strong>：</p>
+<ul>
+<li><p>保持参数的值类别，确保正确调用函数重载。</p>
+</li>
+<li><p>利用移动语义，避免不必要的拷贝，提升性能。</p>
+</li>
+<li><p>编写通用、复用性强的代码。</p>
+<h3 id="4-3-为什么需要原样转发"><a href="#4-3-为什么需要原样转发" class="headerlink" title="4.3 为什么需要原样转发"></a>4.3 为什么需要原样转发</h3><p>在泛型编程中，函数模板可能需要将接收到的参数传递给其他函数。若不使用原样转发，参数会失去原有的值类别信息，可能导致以下问题：</p>
+<ul>
+<li><p>右值参数被当作左值处理，无法利用移动语义，导致性能下降。</p>
+</li>
+<li><p>无法正确调用目标函数的重载版本。</p>
+</li>
+<li><p>增加不必要的拷贝开销，影响程序性能。</p>
+</li>
+</ul>
+<p>通过原样转发，可以确保参数在传递过程中保持其原有的左值或右值特性，提升代码的效率和灵活性。</p>
+</li>
+</ul>
+<h3 id="4-4-示例代码"><a href="#4-4-示例代码" class="headerlink" title="4.4 示例代码"></a>4.4 示例代码</h3><p>​	以下示例展示了如何实现一个通用的<code>wrapper</code>函数，通过原样转发将参数传递给目标函数，同时保留参数的值类别。</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;string></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;utility></span></span>
+
+<span class="token comment" spellcheck="true">// 目标函数，分别有左值和右值的重载</span>
+<span class="token keyword">void</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token keyword">const</span> std<span class="token operator">::</span>string<span class="token operator">&amp;</span> s<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Processing lvalue: "</span> <span class="token operator">&lt;&lt;</span> s <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">process</span><span class="token punctuation">(</span>std<span class="token operator">::</span>string<span class="token operator">&amp;&amp;</span> s<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Processing rvalue: "</span> <span class="token operator">&lt;&lt;</span> s <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// 通用的包装函数，实现原样转发</span>
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> T<span class="token operator">></span>
+<span class="token keyword">void</span> <span class="token function">wrapper</span><span class="token punctuation">(</span>T<span class="token operator">&amp;&amp;</span> arg<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token function">process</span><span class="token punctuation">(</span>std<span class="token operator">::</span>forward<span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    std<span class="token operator">::</span>string name <span class="token operator">=</span> <span class="token string">"Alice"</span><span class="token punctuation">;</span>
+    <span class="token function">wrapper</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>                     <span class="token comment" spellcheck="true">// 传递左值，调用process(const std::string&amp;)</span>
+    <span class="token function">wrapper</span><span class="token punctuation">(</span><span class="token string">"Bob"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                    <span class="token comment" spellcheck="true">// 传递右值，调用process(std::string&amp;&amp;)</span>
+    <span class="token function">wrapper</span><span class="token punctuation">(</span>std<span class="token operator">::</span><span class="token function">move</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>          <span class="token comment" spellcheck="true">// 传递右值，调用process(std::string&amp;&amp;)</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>输出</strong></p>
+<pre class="line-numbers language-cpp"><code class="language-cpp">Processing lvalue<span class="token operator">:</span> Alice
+Processing rvalue<span class="token operator">:</span> Bob
+Processing rvalue<span class="token operator">:</span> Alice
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>在上述代码中：</p>
+<ul>
+<li><p><code>wrapper(name)</code>传递的是左值，<code>T</code>被推导为<code>std::string&amp;</code>，<code>std::forward</code>保持其为左值引用，调用<code>process(const std::string&amp;)</code>。</p>
+</li>
+<li><p><code>wrapper(&quot;Bob&quot;)</code>传递的是右值，<code>T</code>被推导为<code>const char*</code>，在<code>process</code>函数重载的选择上，这里简单化处理为调用接收右值的版本（视具体实现而定）。</p>
+</li>
+<li><p><code>wrapper(std::move(name))</code>传递的是右值，<code>T</code>被推导为<code>std::string</code>，<code>std::forward</code>将其转换为右值引用，调用<code>process(std::string&amp;&amp;)</code>。</p>
+</li>
+</ul>
+<h2 id="C-智能指针与-this-的使用问题总结"><a href="#C-智能指针与-this-的使用问题总结" class="headerlink" title="C++ 智能指针与 this 的使用问题总结"></a>C++ 智能指针与 this 的使用问题总结</h2><h3 id="1-问题背景"><a href="#1-问题背景" class="headerlink" title="1. 问题背景"></a>1. 问题背景</h3><p>在 C++ 中，<code>std::shared_ptr</code> 用于管理对象生命周期。它通过<strong>引用计数</strong>来决定何时 <code>delete</code> 对象。<br> 但是，如果你在类内部直接写：</p>
+<pre><code>std::shared_ptr&lt;Foo&gt;(this);
+</code></pre>
+<p>就会出现严重问题。</p>
+<hr>
+<h3 id="2-为什么会出错"><a href="#2-为什么会出错" class="headerlink" title="2. 为什么会出错"></a>2. 为什么会出错</h3><ol>
+<li><code>this</code> 本身是一个 <strong>裸指针</strong>，对象的销毁规则由编译器或外部控制，而不是 <code>shared_ptr</code>。</li>
+<li>当你写 <code>std::shared_ptr&lt;Foo&gt;(this)</code> 时：<ul>
+<li><code>shared_ptr</code> 会创建一个控制块，认为它拥有这个对象。</li>
+<li>当最后一个 <code>shared_ptr</code> 析构时，会调用 <code>delete this;</code>。</li>
+</ul>
+</li>
+<li>如果这个对象的生命周期不是 <code>new</code> 出来的，或者它本身已经被其他 <code>shared_ptr</code> 管理，就会造成 <strong>重复释放（double delete）</strong> 或 <strong>非法释放</strong>。</li>
+</ol>
+<p>结果通常是 <strong>程序崩溃</strong>。</p>
+<hr>
+<h3 id="3-正确做法"><a href="#3-正确做法" class="headerlink" title="3. 正确做法"></a>3. 正确做法</h3><h4 id="1-如果对象本来应该由-shared-ptr-管理"><a href="#1-如果对象本来应该由-shared-ptr-管理" class="headerlink" title="(1) 如果对象本来应该由 shared_ptr 管理"></a>(1) 如果对象本来应该由 <code>shared_ptr</code> 管理</h4><ul>
+<li>必须用 <code>std::make_shared</code> 创建对象。</li>
+<li>如果类内部需要获取自己的 <code>shared_ptr</code>，要继承 <code>std::enable_shared_from_this</code>。</li>
+</ul>
+<p>示例：</p>
+<pre><code>#include &lt;memory&gt;
+#include &lt;iostream&gt;
+
+class Foo : public std::enable_shared_from_this&lt;Foo&gt; &#123;
+public:
+    std::shared_ptr&lt;Foo&gt; getPtr() &#123;
+        return shared_from_this();  // 安全获取 shared_ptr
+    &#125;
+    void hello() &#123; std::cout &lt;&lt; &quot;hello\n&quot;; &#125;
+&#125;;
+
+int main() &#123;
+    auto p1 = std::make_shared&lt;Foo&gt;(); // 创建对象，由 shared_ptr 管理
+    auto p2 = p1-&gt;getPtr();            // 获取另一个共享的智能指针
+    p2-&gt;hello();                       // 正常使用
+&#125;
+</code></pre>
+<p>✅ 特点：<code>p1</code> 和 <code>p2</code> 共享同一个控制块，不会重复释放。</p>
+<hr>
+<h4 id="2-如果对象不该交给智能指针管理"><a href="#2-如果对象不该交给智能指针管理" class="headerlink" title="(2) 如果对象不该交给智能指针管理"></a>(2) 如果对象不该交给智能指针管理</h4><ul>
+<li>就不要写 <code>shared_ptr(this)</code>，保持裸指针或改用 <code>weak_ptr</code>。</li>
+</ul>
+<p>示例：</p>
+<pre><code>class Bar &#123;
+public:
+    void use(Foo* f) &#123; f-&gt;hello(); &#125;  // 只需要用，不负责生命周期
+&#125;;
+</code></pre>
+<hr>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h3><ul>
+<li><strong>错误原因</strong>：直接把 <code>this</code> 交给 <code>shared_ptr</code>，会导致智能指针错误地认为自己拥有对象，从而重复释放。</li>
+<li><strong>正确方式</strong>：<ol>
+<li>用 <code>std::make_shared</code> 管理对象。</li>
+<li>需要在类内部获取 <code>shared_ptr</code> → 继承 <code>std::enable_shared_from_this</code>，使用 <code>shared_from_this()</code>。</li>
+<li>不希望智能指针管理 → 保持裸指针或 <code>weak_ptr</code>。</li>
+</ol>
+</li>
+</ul>
+</p></div><div class="share"><span>공유하기</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=http://example.com/2025/09/03/c-基础/%20Aero%20c++基础"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2025/09/14/qt/" title="qt"><i class="fa fa-angle-double-left"></i>&nbsp;이전 포스트: qt</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2025/06/17/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="内存管理">다음 포스트: 内存管理&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="http://example.com" rel="noopener noreferrer">Azazel</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script></body></html>
